@@ -1,5 +1,7 @@
 import re
 import logging
+import os
+import mysql.connector
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
@@ -56,3 +58,18 @@ def get_logger():
     logger.addHandler(stream_handler)
 
     return logger
+
+def get_db():
+    username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    database = os.getenv("PERSONAL_DATA_DB_NAME")
+
+    connection = mysql.connector.connect(
+        user=username,
+        password=password,
+        host=host,
+        database=database
+    )
+
+    return connection
