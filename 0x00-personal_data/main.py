@@ -37,30 +37,30 @@ Main file
 # print(get_logger.__annotations__.get('return'))
 # print("PII_FIELDS: {}".format(len(PII_FIELDS)))
 
-# #!/usr/bin/env python3
-# """
-# Main file
-# """
-
-# get_db = __import__('filtered_logger').get_db
-
-# db = get_db()
-# cursor = db.cursor()
-# cursor.execute("SELECT COUNT(*) FROM users;")
-# for row in cursor:
-#     print(row[0])
-# cursor.close()
-# db.close()
-
+#!/usr/bin/env python3
 """
 Main file
 """
 
-hash_password = __import__('encrypt_password').hash_password
-is_valid = __import__('encrypt_password').is_valid
+get_db = __import__('filtered_logger').get_db
 
-password = "MyAmazingPassw0rd"
-encrypted_password = hash_password(password)
-print(encrypted_password)
-print(is_valid(encrypted_password, password))
+db = get_db()
+cursor = db.cursor()
+cursor.execute("SELECT COUNT(*) FROM users;")
+for row in cursor:
+    print(row[0])
+cursor.close()
+db.close()
+
+# """
+# Main file
+# """
+
+# hash_password = __import__('encrypt_password').hash_password
+# is_valid = __import__('encrypt_password').is_valid
+
+# password = "MyAmazingPassw0rd"
+# encrypted_password = hash_password(password)
+# print(encrypted_password)
+# print(is_valid(encrypted_password, password))
 
