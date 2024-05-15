@@ -2,6 +2,8 @@ import re
 import logging
 import os
 import mysql.connector
+import bcrypt
+
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
@@ -73,3 +75,8 @@ def get_db():
     )
 
     return connection
+
+def hash_password(password):
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode(), salt)
+    return hashed_password
