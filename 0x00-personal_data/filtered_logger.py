@@ -17,3 +17,16 @@ class RedactingFormatter(logging.Formatter):
 
 def filter_datum(fields, redaction, message, separator):
     return re.sub(r'({})'.format('|'.join(map(re.escape, fields))), redaction, message).split(separator)
+
+class LogFilter:
+    def __init__(self, fields):
+        self.fields = fields
+
+    def format(self, message, separator):
+        redaction = 'REDACTED'
+        filtered_fields = filter_datum(self.fields, redaction, message, separator)
+        return separator.join(filtered_fields)
+
+
+def filter_datum(fields, redaction, message, separator):
+    return re.sub(r'({})'.format('|'.join(map(re.escape, fields))), redaction, message).split(separator)
