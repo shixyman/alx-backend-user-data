@@ -30,3 +30,29 @@ class LogFilter:
 
 def filter_datum(fields, redaction, message, separator):
     return re.sub(r'({})'.format('|'.join(map(re.escape, fields))), redaction, message).split(separator)
+
+def get_logger():
+    PII_FIELDS = ('name', 'email', 'phone_number', 'address', 'social_security_number')
+
+    class RedactingFormatter(logging.Formatter):
+        def __init__(self, fields):
+            super().__init__()
+            self.fields = fields
+
+        def format(self, record):
+            message = super().format(record)
+            for field in self.fields:
+                message = message.replace(field, '[REDACTED]')
+            return message
+
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    stream_handler = logging.StreamHandler()
+    formatter = RedactingFormatter(PII_FIELDS)
+    stream_handler.setFormatter(formatter)
+
+    logger.addHandler(stream_handler)
+
+    return logger
