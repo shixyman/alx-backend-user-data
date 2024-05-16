@@ -90,13 +90,16 @@ def main():
     main entry point
     """
     db = get_db()
-    logger = get_logger()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
-    fields = cursor.column_names
+    log = get_logger()
     for row in cursor:
-        message = "".join("{}={}; ".format(k, v) for k, v in zip(fields, row))
-        logger.info(message.strip())
+        data = []
+        for desc, value in zip(cursor.description, row):
+            pair = f"{desc[0]}={str(value)}"
+            data.append(pair)
+        row_str = "; ".join(data)
+        log.info(row_str)
     cursor.close()
     db.close()
 
