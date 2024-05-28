@@ -4,6 +4,7 @@
 import bcrypt
 import uuid
 from db import DB
+from werkzeug.security import generate_password_hash
 
 class Auth:
     """Auth class to interact with the authentication database.
@@ -107,4 +108,17 @@ class Auth:
         reset_token = str(uuid.uuid4())
         self._db.update_user_reset_token(user.id, reset_token)
         return reset_token
+    
+    def update_password(self, reset_token: str, password: str) -> None:
+        """
+        Updates the user's password with the given reset token and password.
+        If the reset token is invalid, raises a ValueError.
+        """
+        user = self._db.find_user_by_reset_token(reset_token)
+        if user is None:
+            raise ValueError
+
+        hashed_password = generate_password_hash(password)
+        self._db.update_user_password(user.id, hashed_password)
+        self._db.update_user_reset_token(user.id, None)
     
