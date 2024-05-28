@@ -86,3 +86,11 @@ class Auth:
 
         user = self._db.find_user_by_id(user_id)
         return user
+    
+    class Auth:
+    def __init__(self):
+        self._db = Database()
+
+    def destroy_session(self, user_id: int) -> None:
+        """Destroys the session of the user with the given ID"""
+        self._db.update_user_session_id(user_id, None)
